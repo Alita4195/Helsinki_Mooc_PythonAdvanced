@@ -5,4 +5,40 @@ class SuperHero:
         self.superpowers = superpowers
 
     def __str__(self):
-        return f'{self.name}, superpowers: {self.superpowers}'
+        return f"{self.name}, superpowers: {self.superpowers}"
+
+
+class SuperGroup:
+    def __init__(self, name: str, location: str):
+        self._name = name
+        self._location = location
+        self._members = []
+
+    @property
+    def name(self):
+        return self._name
+
+    def location(self):
+        return self._location
+
+    def add_member(self, hero: SuperHero):
+        self._members.append(hero)
+
+    def print_group(self):
+        group_info = f"{self._name}, {self._location}\nMembers:\n"
+        for hero in self._members:
+            group_info += str(hero) + "\n"
+        print(group_info)
+
+    def __str__(self) -> str:
+        return self.print_group()
+
+
+if __name__ == "__main__":
+    superperson = SuperHero("SuperPerson", "Superspeed, superstrength")
+    invisible = SuperHero("Invisible Inca", "Invisibility")
+    revengers = SuperGroup("Revengers", "Emerald City")
+
+    revengers.add_member(superperson)
+    revengers.add_member(invisible)
+    revengers.print_group()
