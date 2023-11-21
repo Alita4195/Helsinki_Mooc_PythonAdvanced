@@ -23,7 +23,7 @@ class Task:
 
 class OrderBook:
     def __init__(self):
-        self.orders = set()
+        self.orders = set()  # {}set
 
     def add_order(self, description, programmer, workload):
         task = Task(description, programmer, workload)
@@ -35,28 +35,55 @@ class OrderBook:
     def programmers(self):
         return sorted(set(task.programmer for task in self.orders))
 
+    def mark_finished(self, id: int):
+        for task in self.orders:
+            if task.id == id:
+                task.mark_finished()
+                break
+        else:
+            raise ValueError
 
-# t1 = Task("program hello world", "Eric", 3)
-# print(t1.id, t1.description, t1.programmer, t1.workload)
-# print(t1)
-# print(t1.is_finished())
-# t1.mark_finished()
-# print(t1)
-# print(t1.is_finished())
-# t2 = Task("program webstore", "Adele", 10)
-# t3 = Task("program mobile app for workload accounting", "Eric", 25)
-# print(t2)
-# print(t3)
+    def finished_orders(self):
+        return [task for task in self.orders if task.is_finished()]
 
-orders = OrderBook()
-orders.add_order("program webstore", "Adele", 10)
-orders.add_order("program mobile app for workload accounting", "Eric", 25)
-orders.add_order("program app for practising mathematics", "Adele", 100)
+    def unfinished_orders(self):
+        return [task for task in self.orders if not task.is_finished()]
 
-for order in orders.all_orders():
-    print(order)
+    def status_of_programmer(self, programmer: str):
+        finished_task_count = 0
+        unfinished_task_count = 0
+        finished_task_hour = 0
+        unfinished_task_hour = 0
+        programmer_found = False
+        for task in self.orders:
+            if task.programmer == programmer:
+                programmer_found = True  # Set the flag to True
+                if task.is_finished():
+                    finished_task_count += 1
+                    finished_task_hour += task.workload
+                else:
+                    unfinished_task_count += 1
+                    unfinished_task_hour += task.workload
+        if not programmer_found:
+            raise ValueError
 
-print()
+        return (
+            finished_task_count,
+            unfinished_task_count,
+            finished_task_hour,
+            unfinished_task_hour,
+        )
 
-for programmer in orders.programmers():
-    print(programmer)
+
+if __name__ == "__main__":
+    orders = OrderBook()
+    orders.add_order("program webstore", "Adele", 10)
+    orders.add_order("program mobile app for workload accounting", "Adele", 25)
+    orders.add_order("program app for practising mathematics", "Adele", 100)
+    orders.add_order("program the next facebook", "Eric", 1000)
+
+    orders.mark_finished(1)
+    orders.mark_finished(2)
+
+    status = orders.status_of_programmer("Adele")
+    print(status)
