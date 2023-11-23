@@ -11,7 +11,7 @@ pygame.init()
 window = pygame.display.set_mode((640, 480))
 
 robot = pygame.image.load("robot.png")
-window.fill((0, 0, 0))
+window.fill((255, 0, 0))  # fill fills the window with black
 # window.blit(robot, (100, 50))  # blit draws the image at the location (100, 50)
 
 window.blit(robot, (0, 0))
@@ -24,7 +24,7 @@ window.blit(robot, (640 - width, 0))
 
 
 window.blit(robot, (640 - width, 480 - height))
-pygame.display.flip()
+pygame.display.flip() #The contents of the window are updated with the function pygame.display.flip
 
 while True:
     for event in pygame.event.get():
